@@ -31,7 +31,7 @@ require('./src/routes/auth.routes')(app);
 require('./src/routes/user.routes')(app);
 
 app.get('/',(req,res)=>{
-    res.send('Hola Jhosep');
+    res.send('Hola Jhosep - Trabajo Final - IDAT 2025');
 })
 
 const db = require('./src/models');
