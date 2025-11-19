@@ -5,7 +5,21 @@ const Role = require('../models/role.model');
 
 const CLIENT_ID = process.env.CLIENTID;
 const CLIENT_SECRET = process.env.SECRETID;
-const CALLBACK_URL = process.env.GOOGLE_CALLBACK_URL || process.env.CALLBACKURL_BACK;
+// Valor crudo por si el entorno local define explícitamente un callback
+const RAW_CALLBACK = process.env.GOOGLE_CALLBACK_URL || process.env.CALLBACKURL_BACK;
+
+function resolveCallbackURL() {
+  // Si estamos en Render usamos siempre el host público para evitar volver a localhost
+  if (process.env.RENDER_EXTERNAL_HOSTNAME) {
+    return `https://${process.env.RENDER_EXTERNAL_HOSTNAME}/api/auth/google/callback`;
+  }
+  // Si no estamos en Render y existe un callback explícito lo usamos
+  if (RAW_CALLBACK) return RAW_CALLBACK;
+  // Fallback local
+  const port = process.env.PORT || 6969;
+  const base = process.env.HOST_URL || `http://localhost:${port}`;
+  return `${base}/api/auth/google/callback`;
+}
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -25,7 +39,7 @@ passport.use(
     {
       clientID: CLIENT_ID,
       clientSecret: CLIENT_SECRET,
-      callbackURL: CALLBACK_URL
+      callbackURL: resolveCallbackURL()
     },
     async (_accessToken, _refreshToken, profile, done) => {
       try {
