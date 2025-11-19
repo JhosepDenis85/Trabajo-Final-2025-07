@@ -1,52 +1,41 @@
 require('dotenv').config();
 
-const PORT = process.env.PORT || 8080;
 const express = require('express');
-const morgan = require('morgan');
-const helmet = require('helmet');
-const compression = require('compression');
-const cookieSesion = require('cookie-session');
+const session = require('express-session');
+const mongoose = require('mongoose');
 
+const passport = require('./src/config/passport');
+const authRoutes = require('./src/routes/auth.routes');
+
+const PORT = process.env.PORT || 6969;
+const COOKIE_SECRET = process.env.COOKIE_SECRET || 'cookie';
+
+mongoose.set('strictQuery', false);
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB conectado'))
+  .catch((e) => console.error('Error MongoDB', e));
 
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-app.use(morgan('dev'));
-app.use(helmet());
-app.use(compression());
 
-const rateLimit = require('express-rate-limit');
-const limiter = rateLimit({windowMs: 60_000, max: 100});
-
-app.use('/api/', limiter);
 app.use(
-    cookieSesion({
-        name: "auth-session",
-        keys: [process.env.COOKIE_SECRET],
-        httpOnly:true
-}));
+  session({
+    secret: COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false
+  })
+);
 
-require('./src/routes/auth.routes')(app);
-require('./src/routes/user.routes')(app);
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.get('/',(req,res)=>{
-    res.send('Hola Jhosep - Trabajo Final - IDAT 2025');
-})
+// Todas las rutas bajo /api
+app.use('/api', authRoutes);
 
-const db = require('./src/models');
+app.get('/', (_req, res) => res.send('API escuchando'));
 
-db.mongoose.connect(process.env.MONGO_URI,{}).then(()=>{
-    console.log("Estas conectado");
-    db.init();
-}).catch((error)=>{
-    console.log(error)
-    process.error(error);
-    process.exit();
-})
-
-
-
-app.listen(PORT, ()=>{
-    console.log(`Servidor iniciado en el puerto ${PORT}`);
-})
+app.listen(PORT, () => {
+  console.log(`API escuchando en http://localhost:${PORT}`);
+});

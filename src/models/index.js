@@ -1,45 +1,32 @@
 const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
+const Role = require('./role.model');
+const User = require('./user.model');
 
-const db = {};
+// Crea roles requeridos si faltan
+async function init() {
+  const required = ['user', 'admin', 'moderator'];
 
-db.mongoose = mongoose;
+  // Si la colección está vacía, inserta todos
+  const count = await Role.estimatedDocumentCount();
+  if (count === 0) {
+    await Role.insertMany(required.map((name) => ({ name })));
+    console.log('[seed] roles creados:', required.join(', '));
+    return;
+  }
 
-db.user = require('./user.model');
-db.role = require('./role.model');
-
-db.ROLES = ['admin', 'moderator', 'user'];
-
-db.init =  ()=>{
-    db.role.estimatedDocumentCount((err,count)=>{
-        if(!err & count === 0){
-            new db.role({
-                name: "user"
-            }).save((error)=>{
-                if(error){
-                    console.log("Error al crear el Rol user");
-                }
-                console.log("Rol user creado");
-            })
-            new db.role({
-                name: "moderator"
-            }).save((error)=>{
-                if(error){
-                    console.log("Error al crear el Rol moderator");
-                }
-                console.log("Rol moderator creado");
-            })
-            new db.role({
-                name: "admin"
-            }).save((error)=>{
-                if(error){
-                    console.log("Error al crear el Rol admin");
-                }
-                console.log("Rol admin creado");
-            })
-        }
-    })
+  // Si existen algunos, asegura los faltantes
+  for (const name of required) {
+    const exists = await Role.findOne({ name });
+    if (!exists) {
+      await Role.create({ name });
+      console.log(`[seed] rol creado: ${name}`);
+    }
+  }
 }
 
-
-module.exports = db;
+module.exports = {
+  mongoose,
+  role: Role,
+  user: User,
+  init
+};

@@ -1,18 +1,32 @@
-const {verifySignUp} = require('../middelwares');
-const controller = require('../controllers/auth.controller');
+const { Router } = require('express');
+const passport = require('passport');
+const authController = require('../controllers/auth.controller');
+const authJwt = require('../middelwares/authJwt');
+const verifySignUp = require('../middelwares/verifySignUp');
 
-module.exports = function(app){
-    app.use((req,res,next)=>{
-        res.header(
-            "Access-Control-Allow-Headers",
-            "Origin, Content-Type, Accept"
-        );
-        next();
-    });
+const router = Router();
 
-    app.post("/api/auth/signup",[verifySignUp.checkDuplicateUsernameOrEmail, verifySignUp.checkRoleExisted], controller.signup);
-    app.post("/api/auth/signout", controller.signout);
-    app.post("/api/auth/signin", controller.signin);
+// Local
+router.post('/auth/validate', authController.validate);
+router.post('/auth/signup', verifySignUp.checkDuplicateUsernameOrEmail, authController.signup);
+router.post('/auth/signin', authController.signin);
+router.get('/auth/profile', authJwt.verifyToken, authController.profile);
 
-    
-}
+// Google OAuth: inicia login
+router.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'select_account' })
+);
+
+// Google OAuth: callback
+router.get(
+  '/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/api/auth/failed?reason=oauth' }),
+  authController.googleCallback
+);
+
+// Éxito / error
+router.get('/auth/success', authController.authSuccessPage);
+router.get('/auth/failed', authController.authFailedPage);
+
+module.exports = router;

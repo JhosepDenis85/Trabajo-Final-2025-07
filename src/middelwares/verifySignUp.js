@@ -1,54 +1,38 @@
 const db = require('../models');
-const ROLES = db.ROLES;
 const User = db.user;
 
-checkDuplicateUsernameOrEmail = (req, res, next) => {
-    User.findOne({
-        username: req.body.username
-    }).exec((err, user) => {
-        if (err) {
-            res.status(500).send({ message: err });
-            return;
-        }
-        if (user) {
-            console.log(user)
-            res.status(400).send({ message: "El username ya esta en uso" });
-            return;
-        }
-        User.findOne({
-            email: req.body.email
-        }).exec((err, user) => {
-            if (err) {
-                res.status(500).send({ message: err });
-                return;
-            }
-            if (user) {
-                res.status(400).send({ message: "El email ya esta en uso" });
-                return;
-            }
-            next();
-        })
-    })
+const ROLES = ['user', 'admin', 'moderator'];
+
+// Valida duplicados solo si el campo viene; no obliga username y email aquí.
+const checkDuplicateUsernameOrEmail = async (req, res, next) => {
+  try {
+    const body = req.body || {};
+    const username = typeof body.username === 'string' ? body.username.trim() : undefined;
+    const email = typeof body.email === 'string' ? body.email.toLowerCase().trim() : undefined;
+
+    if (username) {
+      const byUser = await User.findOne({ username });
+      if (byUser) return res.status(409).json({ message: 'El username ya está en uso' });
+    }
+    if (email) {
+      const byEmail = await User.findOne({ email });
+      if (byEmail) return res.status(409).json({ message: 'El email ya está registrado' });
+    }
+
+    return next();
+  } catch (err) {
+    return res.status(500).json({ message: err.message || 'Error interno' });
+  }
 };
 
-checkRoleExisted = (req,res,next)=>{
-    if(req.body.roles){
-        for (let index = 0; index < req.body.roles.length; index++) {
-            const element = req.body.roles[index];
-            if(!ROLES.includes(element)){
-                res.status(401).send({message: `El Rol ${element} no existe`});
-                return;
-            }
-
-        }
-        
+const checkRoleExisted = (req, res, next) => {
+  const roles = Array.isArray(req.body?.roles) ? req.body.roles : [];
+  for (const role of roles) {
+    if (!ROLES.includes(role)) {
+      return res.status(400).json({ message: `El rol ${role} no existe` });
     }
-    next();
-}
+  }
+  return next();
+};
 
-const verifySignUp = {
-    checkDuplicateUsernameOrEmail,
-    checkRoleExisted
-}
-
-module.exports = verifySignUp;
+module.exports = { checkDuplicateUsernameOrEmail, checkRoleExisted };
