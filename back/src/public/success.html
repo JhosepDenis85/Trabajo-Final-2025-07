@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Login Exitoso</title>
+<style>
+ body{font-family:Arial,sans-serif;max-width:1200px;margin:20px auto;padding:10px}
+ h1{font-size:48px;margin-bottom:40px}
+ h2{font-size:26px;margin:25px 0 10px}
+ .token-box{border:1px solid #ccc;padding:18px;border-radius:4px;font-family:Courier New,monospace;font-size:14px;line-height:1.4;background:#fafafa}
+ .instruccion{margin-top:30px;font-family:Courier New,monospace;font-size:14px}
+</style>
+</head>
+<body>
+<h1>Login con Google correcto</h1>
+<h2>Token JWT:</h2>
+<div class="token-box" id="tokenDisplay">Cargando token...</div>
+<div class="instruccion">
+<p>Usa este token en Postman:</p>
+<p>GET http://localhost:6969/api/auth/profile</p>
+<p>Authorization: Bearer <span id="tokenShort">...</span></p>
+</div>
+<script>
+ const params=new URLSearchParams(window.location.search);
+ const token=params.get('token');
+ if(token){
+   document.getElementById('tokenDisplay').textContent=token;
+   document.getElementById('tokenShort').textContent=token;
+ }else{
+   document.getElementById('tokenDisplay').textContent='No se encontró el token';
+   document.getElementById('tokenShort').textContent='TOKEN NO ENCONTRADO';
+ }
+</script>
+</body>
+</html>

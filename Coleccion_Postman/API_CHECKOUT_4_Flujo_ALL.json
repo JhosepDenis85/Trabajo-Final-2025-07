@@ -1,0 +1,131 @@
+{
+  "info": {
+    "name": "CHECKOUT - Flujo Completo",
+    "_postman_id": "checkout-flow-all",
+    "description": "Flujo completo: items, cupones, delivery, pago y resumen.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:6969" },
+    { "key": "userId", "value": "" },
+    { "key": "token", "value": "" },
+    { "key": "productId", "value": "" },
+    { "key": "itemId", "value": "" },
+    { "key": "couponCode", "value": "NOV-2025-001" }
+  ],
+  "item": [
+    {
+      "name": "GET Items del carrito",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/checkout/{{userId}}/items"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const r=pm.response.json();",
+              "if(r.items&&r.items.length){pm.collectionVariables.set('itemId', r.items[0]._id);}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST Agregar/Actualizar item",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+            { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/checkout/{{userId}}/items",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"quantity\": 2\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const r=pm.response.json();",
+              "if(r.items&&r.items.length){pm.collectionVariables.set('itemId', r.items[0]._id);}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "DELETE Eliminar item",
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/checkout/{{userId}}/items/{{itemId}}"
+      }
+    },
+    {
+      "name": "POST Validar / Aplicar cupón",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/checkout/{{userId}}/validate-coupon",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"{{couponCode}}\"\n}"
+        }
+      }
+    },
+    {
+      "name": "POST Seleccionar método de entrega",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/checkout/{{userId}}/delivery",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"delivery\",\n  \"address\": \"Av. Siempre Viva 742\",\n  \"schedule\": \"HOY 18:00-20:00\"\n}"
+        }
+      }
+    },
+    {
+      "name": "GET Métodos de pago",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/payment-methods"
+      }
+    },
+    {
+      "name": "POST Seleccionar método de pago",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/checkout/{{userId}}/payment",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"method\": \"card\"\n}"
+        }
+      }
+    },
+    {
+      "name": "GET Resumen final",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/checkout/{{userId}}/summary"
+      }
+    }
+  ]
+}

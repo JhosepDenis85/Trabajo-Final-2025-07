@@ -1,0 +1,132 @@
+{
+  "info": {
+    "name": "Cambio Rol a Admin",
+    "_postman_id": "cambio-rol-admin-collection",
+    "description": "Flujo para promover usuario aprobador.nivel.1.uap de user a admin.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:6969" },
+    { "key": "adminUsername", "value": "admin01" },
+    { "key": "adminEmail", "value": "admin01@gmail.com" },
+    { "key": "adminPassword", "value": "SecretAdmin01$" },
+    { "key": "targetUsername", "value": "aprobador.nivel.1.uap" },
+    { "key": "token", "value": "" },
+    { "key": "targetUserId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "1 - Signup nuevo ADMIN (solo si aún no hay un admin)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/auth/signup",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{adminUsername}}\",\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\",\n  \"roles\": [\"admin\"]\n}"
+        }
+      }
+    },
+    {
+      "name": "2 - Signin ADMIN",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/auth/signin",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{adminUsername}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let json = {};",
+              "try { json = pm.response.json(); } catch(e) {}",
+              "if (json.token) {",
+              "  pm.collectionVariables.set('token', json.token);",
+              "  console.log('TOKEN ADMIN guardado');",
+              "} else {",
+              "  console.log('No se recibió token');",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3 - Listar usuarios (para localizar target)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{baseUrl}}/api/users"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "try {",
+              "  const data = pm.response.json();",
+              "  if (Array.isArray(data)) {",
+              "    const target = data.find(u => u.username === pm.collectionVariables.get('targetUsername'));",
+              "    if (target && target._id) {",
+              "      pm.collectionVariables.set('targetUserId', target._id);",
+              "      console.log('targetUserId establecido:', target._id);",
+              "    } else {",
+              "      console.log('No se encontró el usuario objetivo');",
+              "    }",
+              "  }",
+              "} catch(e) { console.log('Error parseando usuarios', e); }"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4 - GET Usuario objetivo (verificar antes del cambio)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{baseUrl}}/api/users/{{targetUserId}}"
+      }
+    },
+    {
+      "name": "5 - Actualizar roles a admin",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/users/{{targetUserId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"roles\": [\"admin\"]\n}"
+        }
+      }
+    },
+    {
+      "name": "6 - Verificar usuario objetivo (debe tener rol admin)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{baseUrl}}/api/users/{{targetUserId}}"
+      }
+    }
+  ]
+}

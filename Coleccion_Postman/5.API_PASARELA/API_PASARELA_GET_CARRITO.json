@@ -1,0 +1,30 @@
+{
+  "info": {
+    "name": "PASARELA - GET Carrito",
+    "_postman_id": "pasarela-get-carrito",
+    "description": "Obtiene/actualiza draft de pago y totales antes de procesar.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:6969" },
+    { "key": "userId", "value": "" },
+    { "key": "token", "value": "" },
+    { "key": "orderDraftId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "GET Carrito (Genera/Refresca Draft)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/pasarela/{{userId}}/carrito"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": { "exec": ["const r=pm.response.json(); if(r.orderDraftId){ pm.collectionVariables.set('orderDraftId', r.orderDraftId);}"] }
+        }
+      ]
+    }
+  ]
+}

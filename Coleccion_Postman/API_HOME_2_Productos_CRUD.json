@@ -1,0 +1,83 @@
+{
+  "info": {
+    "name": "HOME - Productos",
+    "_postman_id": "home-products",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:6969" },
+    { "key": "token", "value": "" },
+    { "key": "productId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Buscar productos (público)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/home/products?q=&category=&brand=&priceMin=&priceMax=&sort=price_asc&page=1&limit=20"
+      }
+    },
+    {
+      "name": "Detalle producto (público)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/home/products/{{productId}}"
+      }
+    },
+    {
+      "name": "Crear productos BULK (ADMIN)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/home/products/bulk",
+        "body": {
+          "mode": "raw",
+          "raw": "[\n  {\"category\":\"Limpieza del Hogar\",\"code\":\"SKU0010\",\"name\":\"Detergente polvo 3 kg\",\"brand\":\"Bolívar\",\"price\":22.5},\n  {\"category\":\"Bebidas No Alcohólicas\",\"code\":\"SKU0036\",\"name\":\"Té frío embotellado 1.25 L\",\"brand\":\"Umsha\",\"price\":5.8},\n  {\"category\":\"Lácteos y Derivados\",\"code\":\"SKU0021\",\"name\":\"Leche UHT Entera Pack 3 x 1 L\",\"brand\":\"Gloria\",\"price\":21.0},\n  {\"category\":\"Snacks\",\"code\":\"SKU0124\",\"name\":\"Galleta Charada 86 g\",\"brand\":\"Field\",\"price\":3.4}\n]"
+        }
+      }
+    },
+    {
+      "name": "Crear producto (ADMIN)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/home/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"category\": \"Abarrotes\",\n  \"code\": \"SKU0001\",\n  \"name\": \"Spaghetti 950 g (Paquete)\",\n  \"brand\": \"Don Vittorio\",\n  \"price\": 5.5\n}"
+        }
+      }
+    },
+    {
+      "name": "Actualizar producto (ADMIN)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/home/products/{{productId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"price\": 5.9,\n  \"brand\": \"Don Vittorio\",\n  \"active\": true\n}"
+        }
+      }
+    },
+    {
+      "name": "Eliminar producto (ADMIN)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{baseUrl}}/api/home/products/{{productId}}"
+      }
+    }
+  ]
+}

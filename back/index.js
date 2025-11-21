@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const passport = require('./src/config/passport');
 const { createRoles } = require('./src/models');
+const morgan = require('morgan');
 
 const authRoutes = require('./src/routes/auth.routes');
 const userRoutes = require('./src/routes/user.routes');
@@ -18,11 +19,14 @@ const homeCouponRoutes = require('./src/routes/home/coupons.routes');
 const checkoutRoutes = require('./src/routes/checkout/checkout.routes');
 const checkoutController = require('./src/controllers/checkout/checkout.controller');
 const pasarelaRoutes = require('./src/routes/pasarela/pasarela.routes');
+const misComprasRoutes = require('./src/routes/miscompras/miscompras.routes'); // <-- agregado
+
 const { initSocket } = require('./src/socket');
 
 const PORT = process.env.PORT || 6969;
 const COOKIE_SECRET = process.env.COOKIE_SECRET || 'cookie';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+const ALLOWED_ORIGINS = [ FRONTEND_URL, 'http://localhost:5173' ];
 
 mongoose.set('strictQuery', false);
 mongoose
@@ -34,14 +38,21 @@ mongoose
     }
     startServer();
   })
-  .catch((e) => console.error('Error MongoDB', e));
+  .catch(e => console.error('Error MongoDB', e));
 
 function startServer() {
   const app = express();
 
-  app.use(cors({ origin: FRONTEND_URL, credentials: true }));
+  app.use(cors({
+    origin: (origin, cb) => {
+      if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+      return cb(new Error('CORS bloqueado'));
+    },
+    credentials: true
+  }));
   app.use(express.json());
   app.use(cookieParser());
+  app.use(morgan('dev'));
 
   app.use(session({
     secret: COOKIE_SECRET,
@@ -66,10 +77,12 @@ function startServer() {
 
   app.use('/api/pasarela', pasarelaRoutes);
 
+  app.use('/api/mis-compras', misComprasRoutes); // <-- agregado
+
   app.get('/api/health', (_req, res) => res.json({ ok: true }));
 
   app.get(['/success', '/api/auth/success'], (req, res) => {
-    return res.sendFile(path.join(__dirname, 'src/public/success.html'));
+    res.sendFile(path.join(__dirname, 'src/public/success.html'));
   });
 
   app.get('/', (req, res) => {
@@ -81,7 +94,6 @@ function startServer() {
 
   const server = http.createServer(app);
   initSocket(server);
-
   server.listen(PORT, () => {
     console.log(`API escuchando en http://localhost:${PORT}`);
   });
