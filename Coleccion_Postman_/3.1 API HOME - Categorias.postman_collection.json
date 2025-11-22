@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "c36faea1-9c92-40ca-9a18-43657eea5ae8",
+		"name": "3.1 API HOME - Categorias",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8922758",
+		"_collection_link": "https://galactic-escape-982968.postman.co/workspace/Semana-10~47908056-70de-4399-841b-deb38fdcb7f0/collection/8922758-c36faea1-9c92-40ca-9a18-43657eea5ae8?action=share&source=collection_link&creator=8922758"
+	},
+	"item": [
+		{
+			"name": "Listar categorías",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/home/categories",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"home",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear categorías (bulk, ADMIN)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"name\":\"Abarrotes\"},{\"name\":\"Bebidas Alcohólicas\"},{\"name\":\"Bebidas No Alcohólicas\"},{\"name\":\"Carnes\"},{\"name\":\"Cuidado Personal\"},{\"name\":\"Embutidos\"},{\"name\":\"Frutas y Verduras\"},{\"name\":\"Lácteos y Derivados\"},{\"name\":\"Limpieza del Hogar\"},{\"name\":\"Mascotas\"},{\"name\":\"Snacks\"}]"
+				},
+				"url": {
+					"raw": "https://trabajo-final-2025-07.onrender.com/api/home/categories/bulk",
+					"protocol": "https",
+					"host": [
+						"trabajo-final-2025-07",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"home",
+						"categories",
+						"bulk"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar categoría (ADMIN)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Abarrotes y Pastas\",\n  \"active\": true\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/home/categories/{{categoryId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"home",
+						"categories",
+						"{{categoryId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar categoría (ADMIN)",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/home/categories/{{categoryId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"home",
+						"categories",
+						"{{categoryId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:6969"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "categoryId",
+			"value": ""
+		}
+	]
+}

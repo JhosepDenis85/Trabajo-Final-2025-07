@@ -1,0 +1,294 @@
+{
+	"info": {
+		"_postman_id": "706b1c51-95a0-4a3c-987d-5a8e23900ef5",
+		"name": "2.1 API REGISTRO Logueo Usuario",
+		"description": "Colección mínima para pruebas de autenticación sobre el deploy en Render.\nBase URL: https://trabajo-final-2025-07.onrender.com\nEndpoints: signup, validate, signin, profile (JWT), google (OAuth).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8922758",
+		"_collection_link": "https://galactic-escape-982968.postman.co/workspace/Semana-10~47908056-70de-4399-841b-deb38fdcb7f0/collection/8922758-706b1c51-95a0-4a3c-987d-5a8e23900ef5?action=share&source=collection_link&creator=8922758"
+	},
+	"item": [
+		{
+			"name": "POST Signup - Registro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status 200/201 esperado', () => {",
+							"  pm.expect([200,201]).to.include(pm.response.code);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"Jhosep004\",\n  \"email\": \"jhosep.004@gmail.com\",\n  \"password\": \"Secret001\",\n  \"roles\": [\"user\"]\n}"
+				},
+				"url": {
+					"raw": "https://trabajo-final-2025-07.onrender.com/api/auth/signup",
+					"protocol": "https",
+					"host": [
+						"trabajo-final-2025-07",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				},
+				"description": "Registra un usuario con username, email y password."
+			},
+			"response": []
+		},
+		{
+			"name": "POST Validate - Disponibilidad",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Respuesta JSON', () => {",
+							"  pm.response.to.have.status(200);",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"{{test_username}}\",\n  \"email\": \"{{test_email}}\"\n}"
+				},
+				"url": {
+					"raw": "https://trabajo-final-2025-07.onrender.com/api/auth/validate",
+					"protocol": "https",
+					"host": [
+						"trabajo-final-2025-07",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"auth",
+						"validate"
+					]
+				},
+				"description": "Verifica disponibilidad de username/email antes de registrar."
+			},
+			"response": []
+		},
+		{
+			"name": "POST Signin - Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Login OK', () => {",
+							"  pm.response.to.have.status(200);",
+							"  const json = pm.response.json();",
+							"  pm.expect(json).to.have.property('username');",
+							"});",
+							"",
+							"// Intenta extraer token si viene en la respuesta (ajusta clave si difiere)",
+							"try {",
+							"  const json = pm.response.json();",
+							"  if (json.token) {",
+							"    pm.collectionVariables.set('auth_token', json.token);",
+							"  }",
+							"} catch(e) {}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n\n{\n  \"username\": \"Jhosep001\",\n  \"password\": \"Secret001\"\n}"
+				},
+				"url": {
+					"raw": "https://trabajo-final-2025-07.onrender.com/api/auth/signin",
+					"protocol": "https",
+					"host": [
+						"trabajo-final-2025-07",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signin"
+					]
+				},
+				"description": "Login con credenciales locales. Devuelve datos + token JWT (según tu implementación)."
+			},
+			"response": []
+		},
+		{
+			"name": "GET Profile - JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Perfil accesible', () => {",
+							"  pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://trabajo-final-2025-07.onrender.com/api/auth/profile",
+					"protocol": "https",
+					"host": [
+						"trabajo-final-2025-07",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"auth",
+						"profile"
+					]
+				},
+				"description": "Obtiene perfil del usuario autenticado usando Authorization Bearer."
+			},
+			"response": []
+		},
+		{
+			"name": "GET Google OAuth (Inicia flujo)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Redirección esperada o código 200/302', () => {",
+							"  pm.expect([200,302,503]).to.include(pm.response.code);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://trabajo-final-2025-07.onrender.com/api/auth/google",
+					"protocol": "https",
+					"host": [
+						"trabajo-final-2025-07",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"auth",
+						"google"
+					]
+				},
+				"description": "Inicia el flujo OAuth de Google. En Postman normalmente redirige; se recomienda abrir en navegador."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"exec": [
+					"// Pre-request global: asegurar base_url",
+					"if (!pm.collectionVariables.get('base_url')) {",
+					"  pm.collectionVariables.set('base_url', 'https://trabajo-final-2025-07.onrender.com');",
+					"}"
+				],
+				"type": "text/javascript"
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"exec": [
+					"// Test global: tiempo de respuesta < 5000ms",
+					"pm.test('Tiempo < 5000ms', () => {",
+					"  pm.expect(pm.response.responseTime).to.be.below(5000);",
+					"});"
+				],
+				"type": "text/javascript"
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://trabajo-final-2025-07.onrender.com"
+		},
+		{
+			"key": "auth_token",
+			"value": ""
+		},
+		{
+			"key": "test_username",
+			"value": "usuario_demo"
+		},
+		{
+			"key": "test_email",
+			"value": "usuario.demo@example.com"
+		},
+		{
+			"key": "test_password",
+			"value": "123456"
+		}
+	]
+}

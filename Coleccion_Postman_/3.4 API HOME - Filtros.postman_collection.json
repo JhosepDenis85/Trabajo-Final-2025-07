@@ -1,0 +1,129 @@
+{
+	"info": {
+		"_postman_id": "6e89ecd9-0a38-4a6f-8cfe-e8675bfcc1ff",
+		"name": "3.4 API HOME - Filtros",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8922758",
+		"_collection_link": "https://galactic-escape-982968.postman.co/workspace/Semana-10~47908056-70de-4399-841b-deb38fdcb7f0/collection/8922758-6e89ecd9-0a38-4a6f-8cfe-e8675bfcc1ff?action=share&source=collection_link&creator=8922758"
+	},
+	"item": [
+		{
+			"name": "Por categoría Limpieza",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/home/products?category=Limpieza%20del%20Hogar",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"home",
+						"products"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "Limpieza%20del%20Hogar"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Por marca Gloria",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/home/products?brand=Gloria&sort=price_asc",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"home",
+						"products"
+					],
+					"query": [
+						{
+							"key": "brand",
+							"value": "Gloria"
+						},
+						{
+							"key": "sort",
+							"value": "price_asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rango de precios 3 a 10",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/home/products?priceMin=3&priceMax=10&sort=price_asc",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"home",
+						"products"
+					],
+					"query": [
+						{
+							"key": "priceMin",
+							"value": "3"
+						},
+						{
+							"key": "priceMax",
+							"value": "10"
+						},
+						{
+							"key": "sort",
+							"value": "price_asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Texto libre: galleta",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/home/products?q=galleta",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"home",
+						"products"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "galleta"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:6969"
+		}
+	]
+}

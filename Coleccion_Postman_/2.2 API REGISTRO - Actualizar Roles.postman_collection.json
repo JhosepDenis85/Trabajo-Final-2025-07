@@ -1,0 +1,249 @@
+{
+	"info": {
+		"_postman_id": "6b9956d8-48ff-413a-a10b-41cb9ddfc910",
+		"name": "2.2 API REGISTRO - Actualizar Roles",
+		"description": "Flujo para promover usuario aprobador.nivel.1.uap de user a admin.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8922758",
+		"_collection_link": "https://galactic-escape-982968.postman.co/workspace/Semana-10~47908056-70de-4399-841b-deb38fdcb7f0/collection/8922758-6b9956d8-48ff-413a-a10b-41cb9ddfc910?action=share&source=collection_link&creator=8922758"
+	},
+	"item": [
+		{
+			"name": "1 - Signup nuevo ADMIN (solo si aún no hay un admin)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"{{adminUsername}}\",\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\",\n  \"roles\": [\"admin\"]\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/signup",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2 - Signin ADMIN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let json = {};",
+							"try { json = pm.response.json(); } catch(e) {}",
+							"if (json.token) {",
+							"  pm.collectionVariables.set('token', json.token);",
+							"  console.log('TOKEN ADMIN guardado');",
+							"} else {",
+							"  console.log('No se recibió token');",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"{{adminUsername}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:6969/api/auth/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6969",
+					"path": [
+						"api",
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5 - Actualizar roles a admin",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"roles\": [\"admin\"]\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users/{{targetUserId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"{{targetUserId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3 - Listar usuarios (para localizar target)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {",
+							"  const data = pm.response.json();",
+							"  if (Array.isArray(data)) {",
+							"    const target = data.find(u => u.username === pm.collectionVariables.get('targetUsername'));",
+							"    if (target && target._id) {",
+							"      pm.collectionVariables.set('targetUserId', target._id);",
+							"      console.log('targetUserId establecido:', target._id);",
+							"    } else {",
+							"      console.log('No se encontró el usuario objetivo');",
+							"    }",
+							"  }",
+							"} catch(e) { console.log('Error parseando usuarios', e); }"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:6969/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6969",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4 - GET Usuario objetivo (verificar antes del cambio)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/users/{{targetUserId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"{{targetUserId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6 - Verificar usuario objetivo (debe tener rol admin)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/users/{{targetUserId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"{{targetUserId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:6969"
+		},
+		{
+			"key": "adminUsername",
+			"value": "admin01"
+		},
+		{
+			"key": "adminEmail",
+			"value": "admin01@gmail.com"
+		},
+		{
+			"key": "adminPassword",
+			"value": "SecretAdmin01$"
+		},
+		{
+			"key": "targetUsername",
+			"value": "aprobador.nivel.1.uap"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "targetUserId",
+			"value": ""
+		}
+	]
+}

@@ -1,0 +1,162 @@
+{
+	"info": {
+		"_postman_id": "0315fa3f-9334-49ca-9cb0-c395ed34860d",
+		"name": "4.1 CHECKOUT - Items (CRUD)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8922758",
+		"_collection_link": "https://galactic-escape-982968.postman.co/workspace/Semana-10~47908056-70de-4399-841b-deb38fdcb7f0/collection/8922758-0315fa3f-9334-49ca-9cb0-c395ed34860d?action=share&source=collection_link&creator=8922758"
+	},
+	"item": [
+		{
+			"name": "GET Items del carrito",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();",
+							"if (json.items && json.items[0]) pm.collectionVariables.set('itemId', json.items[0]._id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/checkout/{{userId}}/items",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"checkout",
+						"{{userId}}",
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Agregar/Actualizar item por productoId",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"productId\": \"69210d381088b793f0ed5796\",\n  \"quantity\": 2\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/checkout/{{userId}}/items",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"checkout",
+						"{{userId}}",
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Cambiar cantidad (mismo endpoint POST)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"productId\": \"69210d381088b793f0ed5796\",\n  \"quantity\": 3\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/checkout/{{userId}}/items",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"checkout",
+						"{{userId}}",
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE Eliminar item",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/checkout/{{userId}}/items/{{itemId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"checkout",
+						"{{userId}}",
+						"items",
+						"{{itemId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:6969"
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "itemId",
+			"value": ""
+		},
+		{
+			"key": "productId",
+			"value": ""
+		}
+	]
+}

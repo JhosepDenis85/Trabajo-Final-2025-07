@@ -1,0 +1,134 @@
+{
+	"info": {
+		"_postman_id": "6f36d925-5509-45d5-aafd-df9db8c66b58",
+		"name": "4.2 CHECKOUT - Resumen y Entrega (CRUD)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8922758",
+		"_collection_link": "https://galactic-escape-982968.postman.co/workspace/Semana-10~47908056-70de-4399-841b-deb38fdcb7f0/collection/8922758-6f36d925-5509-45d5-aafd-df9db8c66b58?action=share&source=collection_link&creator=8922758"
+	},
+	"item": [
+		{
+			"name": "POST Seleccionar delivery",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"type\": \"delivery\",\n  \"address\": \"Av. Siempre Viva 742\",\n  \"schedule\": \"HOY 18:00-20:00\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/checkout/{{userId}}/delivery",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"checkout",
+						"{{userId}}",
+						"delivery"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Métodos de pago",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/payment-methods",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"payment-methods"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Seleccionar método de pago",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"method\": \"card\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/checkout/{{userId}}/payment",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"checkout",
+						"{{userId}}",
+						"payment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Resumen final",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/checkout/{{userId}}/summary",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"checkout",
+						"{{userId}}",
+						"summary"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:6969"
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}

@@ -1,0 +1,190 @@
+{
+	"info": {
+		"_postman_id": "db3a2769-91c3-496a-a6cc-778c0333eaa2",
+		"name": "3.2 API HOME - Productos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8922758",
+		"_collection_link": "https://galactic-escape-982968.postman.co/workspace/Semana-10~47908056-70de-4399-841b-deb38fdcb7f0/collection/8922758-db3a2769-91c3-496a-a6cc-778c0333eaa2?action=share&source=collection_link&creator=8922758"
+	},
+	"item": [
+		{
+			"name": "Buscar productos (público)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/home/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"home",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Detalle producto (público)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/home/products/{{productId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"home",
+						"products",
+						"{{productId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear productos BULK (ADMIN)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n \n {\"category\":\"Limpieza del Hogar\",\"code\":\"SKU0010\",\"name\":\"Detergente polvo 3 kg\",\"brand\":\"Bolívar\",\"price\":22.5},\n {\"category\":\"Bebidas No Alcohólicas\",\"code\":\"SKU0036\",\"name\":\"Té frío embotellado 1.25 L\",\"brand\":\"Umsha\",\"price\":5.8},\n {\"category\":\"Lácteos y Derivados\",\"code\":\"SKU0021\",\"name\":\"Leche UHT Entera Pack 3 x 1 L\",\"brand\":\"Gloria\",\"price\":21.0},\n {\"category\":\"Snacks\",\"code\":\"SKU0124\",\"name\":\"Galleta Charada 86 g\",\"brand\":\"Field\",\"price\":3.4},\n {\"category\":\"Abarrotes\",\"code\":\"SKU0002\",\"name\":\"Linguini Grosso 950 g\",\"brand\":\"Don Vittorio\",\"price\":5.5},\n {\"category\":\"Abarrotes\",\"code\":\"SKU0001\",\"name\":\"Spaghetti 950 g (Paquete)\",\"brand\":\"Don Vittorio\",\"price\":5.5},\n\n {\"category\":\"Abarrotes\",\"code\":\"SKU0004\",\"name\":\"Arroz blanco 1 kg\",\"brand\":\"San Jorge\",\"price\":4.4},\n {\"category\":\"Carnes\",\"code\":\"SKU0079\",\"name\":\"Pechuga de pollo 1 kg\",\"brand\":\"San Fernandoe\",\"price\":15.9},\n {\"category\":\"Carnes\",\"code\":\"SKU0080\",\"name\":\"Pierna de pollo 1 kg\",\"brand\":\"Redondos\",\"price\":12.5},  \n {\"category\":\"Carnes\",\"code\":\"SKU0081\",\"name\":\"Carne molida especial 1 kg\",\"brand\":\"San Fernando\",\"price\":23.9},\t\t\t\t\n {\"category\":\"Limpieza del Hogar\",\"code\":\"SKU0068\",\"name\":\"Lejía Clorox 2 L\",\"brand\":\"Clorox\",\"price\":9.5},\n {\"category\":\"Limpieza del Hogar\",\"code\":\"SKU0069\",\"name\":\"Desinfectante Sapolio floral 1 L\",\"brand\":\"Sapolio\",\"price\":6.4},\n {\"category\":\"Limpieza del Hogar\",\"code\":\"SKU0070\",\"name\":\"Detergente polvo 3 kg\",\"brand\":\"Ariel\",\"price\":22.5},\n {\"category\":\"Cuidado Personal\",\"code\":\"SKU0098\",\"name\":\"Lejía Clorox 2 L\",\"brand\":\"Plusbelle\",\"price\":10.9},\n {\"category\":\"Cuidado Personal\",\"code\":\"SKU0099\",\"name\":\"Jabón tocador Camay 3 unidades\",\"brand\":\"Camay\",\"price\":6.5},\n {\"category\":\"Cuidado Personal\",\"code\":\"SKU0100\",\"name\":\"Pasta dental Kolynos triple acción 90 g\",\"brand\":\"Kolynos\",\"price\":4.7},\n {\"category\":\"Bebidas No Alcohólicas\",\"code\":\"SKU0037\",\"name\":\"Café instantáneo 170 g (tarro)\",\"brand\":\"Altomayo\",\"price\":28.5},\n {\"category\":\"Bebidas No Alcohólicas\",\"code\":\"SKU0038\",\"name\":\"Agua mineral 1.5 L\",\"brand\":\"San Luis\",\"price\":2.9},\n {\"category\":\"Bebidas No Alcohólicas\",\"code\":\"SKU0039\",\"name\":\"Agua mineral 625 ml\",\"brand\":\"San Luis\",\"price\":1.8},\n {\"category\":\"Bebidas Alcohólicas\",\"code\":\"SKU0043\",\"name\":\"Pisco Quebranta 750 ml\",\"brand\":\"Pisco Portón\",\"price\":52},\n {\"category\":\"Bebidas Alcohólicas\",\"code\":\"SKU0044\",\"name\":\"Ron Cartavio 750 ml\",\"brand\":\"Ron Cartavio\",\"price\":33} ,\n {\"category\":\"Bebidas Alcohólicas\",\"code\":\"SKU0045\",\"name\":\"Cerveza Pilsen 330 ml (bot.)\",\"brand\":\"Pilsen Callao\",\"price\":3.8},   \n {\"category\":\"Lácteos y Derivados\",\"code\":\"SKU0025\",\"name\":\"Leche UHT light 1 L\",\"brand\":\"Gloria\",\"price\":6.2},   \n {\"category\":\"Lácteos y Derivados\",\"code\":\"SKU0026\",\"name\":\"Pack leche UHT 3 x 1 L\",\"brand\":\"Gloria\",\"price\":16.5},   \t\t\n {\"category\":\"Lácteos y Derivados\",\"code\":\"SKU0027\",\"name\":\"Yogurt bebible 1 L\",\"brand\":\"Gloria\",\"price\":8.9},   \n {\"category\":\"Snacks\",\"code\":\"SKU0126\",\"name\":\"Papas fritas clásicas 90 g\",\"brand\":\"Lay’s Perú\",\"price\":4.5},\n {\"category\":\"Snacks\",\"code\":\"SKU0127\",\"name\":\"Chizitos 85 g\",\"brand\":\"Facundo\",\"price\":3.3},\n {\"category\":\"Snacks\",\"code\":\"SKU0128\",\"name\":\"Maní salado 150 g\",\"brand\":\"Fanny\",\"price\":6.2},\n {\"category\":\"Snacks\",\"code\":\"SKU0129\",\"name\":\"Galleta Casino vainilla 12 unid\",\"brand\":\"Casino\",\"price\":3.5}\n \n]"
+				},
+				"url": {
+					"raw": "https://trabajo-final-2025-07.onrender.com/api/home/products/bulk",
+					"protocol": "https",
+					"host": [
+						"trabajo-final-2025-07",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"home",
+						"products",
+						"bulk"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear producto (ADMIN)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"category\": \"Bebidas Alcohólicas\",\n  \"code\": \"SKU0049\",\n  \"name\": \"Vino Borgoña 750 ml\",\n  \"brand\": \"Tacama\",\n  \"price\": 18.9\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/home/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"home",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar producto (ADMIN)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"price\": 4.4,\n  \"brand\": \"Manatiales\",\n  \"active\": true\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/home/products/{{productId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"home",
+						"products",
+						"{{productId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar producto (ADMIN)",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/home/products/{{productId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"home",
+						"products",
+						"{{productId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:6969"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "productId",
+			"value": ""
+		}
+	]
+}

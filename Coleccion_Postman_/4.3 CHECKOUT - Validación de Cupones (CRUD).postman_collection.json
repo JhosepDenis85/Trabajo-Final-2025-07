@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "46587a26-01bb-4304-ba19-7d3a7c54873e",
+		"name": "4.3 CHECKOUT - Validación de Cupones (CRUD)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8922758",
+		"_collection_link": "https://galactic-escape-982968.postman.co/workspace/Semana-10~47908056-70de-4399-841b-deb38fdcb7f0/collection/8922758-46587a26-01bb-4304-ba19-7d3a7c54873e?action=share&source=collection_link&creator=8922758"
+	},
+	"item": [
+		{
+			"name": "POST Aplicar cupón",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"code\": \"{{couponCode}}\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/checkout/{{userId}}/validate-coupon",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"checkout",
+						"{{userId}}",
+						"validate-coupon"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Items (ver descuento aplicado)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/checkout/{{userId}}/items",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"checkout",
+						"{{userId}}",
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Cambiar a recojo en tienda",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"type\": \"pickup\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/checkout/{{userId}}/delivery",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"checkout",
+						"{{userId}}",
+						"delivery"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE Eliminar primer item (opcional)",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/checkout/{{userId}}/items/{{itemId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"checkout",
+						"{{userId}}",
+						"items",
+						"{{itemId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:6969"
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "couponCode",
+			"value": "NOV-2025-001"
+		}
+	]
+}
