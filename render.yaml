@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: Trabajo-Final-2025-07
+    runtime: node
+    rootDir: back
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: NODE_VERSION
+        value: 22.16.0
+      - key: PORT
+        value: 6969
+      - key: FRONTEND_URL
+        sync: false
+      - key: MONGO_URI
+        sync: false
+      - key: COOKIE_SECRET
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CLIENTID
+        sync: false
+      - key: SECRETID
+        sync: false
+      - key: SKSTRIPE
+        sync: false
+      - key: GOOGLE_CALLBACK_URL
+        value: https://trabajo-final-2025-07.onrender.com/api/auth/google/callback
+      - key: CALLBACKURL_BACK
+        value: https://trabajo-final-2025-07.onrender.com/api/auth/google/callback
